@@ -86,7 +86,7 @@ class PostLike(UserModel):
             self.user
         )
     
-class CommentLikes(UserModel):
+class CommentLike(UserModel):
     comment = models.ForeignKey(
         Comment,
         verbose_name=_("comment"),
