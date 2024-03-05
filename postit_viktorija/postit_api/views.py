@@ -100,7 +100,30 @@ class PostLike(generics.CreateAPIView, mixins.DestroyModelMixin):
         else:
             raise ValidationError(_("You must already like this to unlike this"))   
 
-         
+
+class CommentLike(generics.CreateAPIView, mixins.DestroyModelMixin):
+    serializer_class = serializers.CommentLikeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = models.CommentLike.objects.all()
+        comment = models.Comment.objects.get(pk=self.kwargs['pk'])
+        return queryset.filter(comment=comment, user=self.request.user)
+    
+    def perform_create(self, serializer):
+        if self.get_queryset().exists():
+            raise ValidationError(_("You already like this"))
+        comment = models.Comment.objects.get(pk=self.kwargs['pk'])
+        serializer.save(comment=comment, user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if queryset.exists():
+            queryset.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            raise ValidationError(_("You must already like this to unlike this"))
+
             
 
 
