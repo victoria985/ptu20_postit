@@ -31,6 +31,9 @@ def post_detail(post_pk: int, root_window:sg.Window, auth_token: str) -> None:
         [
             sg.Button('CLOSE', key="-CLOSE-"),
         ],
+        # [
+        #     sg.Text(f"Currently logged in as {root_window['-USERNAME-']}"),
+        # ],
     ]
 
     window = sg.Window(
@@ -38,7 +41,7 @@ def post_detail(post_pk: int, root_window:sg.Window, auth_token: str) -> None:
         layout, 
         element_justification='center', 
         element_padding=10, 
-        finalize=True
+        finalize=True,
     )
 
     while True:
