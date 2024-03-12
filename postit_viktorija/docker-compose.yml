@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  postitviktorija:
+    build: .
+    image: postitviktorija:dev
+    container_name: postitviktorija.dev
+    tty: true
+    stdin_open: true
+    restart: always
+    ports:
+     - 8000:8000
+    volumes:
+      - ./postit_viktorija:/app
+    command: >
+      bash -c "python manage.py migrate &&
+               python manage.py collectstatic --noinput &&
+               gunicorn postitviktorija.wsgi --bind 0.0.0.0:8000"  
+  nginx:
+    build: ./nginx/
+    image: nginx:postitviktorija
+    container_name: postitviktorija.nginx
+    restart: always
+    ports:
+      - 80:80
+    volumes:
+      - ./postit_viktorija/media:/app/media
+      - ./postit_viktorija/static:/app/static
