@@ -19,3 +19,4 @@ print(data)
 for post in data:
     for key, value in post.items():
         print(f"{key}: {value}")
+        

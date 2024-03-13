@@ -64,3 +64,4 @@ def post_detail(post_pk: int, root_window:sg.Window, auth_token: str) -> None:
     window.close()
 
     root_window.un_hide()
+    

@@ -8,13 +8,30 @@ services:
     stdin_open: true
     restart: always
     ports:
-     - 8000:8000
+      - 8000:8000
     volumes:
       - ./postit_viktorija:/app
+    depends_on:
+      - db
+    links:
+      - db:postgres  
+    env_file:
+      - .env    
     command: >
-      bash -c "python manage.py migrate &&
+      bash -c "python wait_for_postgres.py &&
+               python manage.py migrate &&
                python manage.py collectstatic --noinput &&
-               gunicorn postitviktorija.wsgi --bind 0.0.0.0:8000"  
+               gunicorn postit_viktorija.wsgi --bind 0.0.0.0:8000"  
+  db:
+    image: postgres
+    container_name: postitviktorija.db
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ./dbdata:/var/lib/postgresql/data  
+    env_file:
+      - .env               
   nginx:
     build: ./nginx/
     image: nginx:postitviktorija
