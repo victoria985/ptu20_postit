@@ -1,4 +1,0 @@
-POSTGRES_DB=postitviktorija
-POSTGRES_USER=viktorija
-POSTGRES_PASSWORD=geradiena
-POSTGRES_PORT=5432
